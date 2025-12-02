@@ -41,7 +41,7 @@ class OrderService {
         return response.data;
     }
 
-    async getDeliveryBoyOrders(location_id?: string | null, page?: number) {
+    async getDeliveryBoyOrders(location_id?: string | null, status?: string | null, date?: Date, page?: number) {
         const urlParams = new URLSearchParams()
         
         if (page) {
@@ -50,6 +50,18 @@ class OrderService {
         
         if (location_id) {
             urlParams.append("location_id", location_id.toString())
+        }
+
+        if(status) {
+            urlParams.append("status", status)
+        }
+
+        if(date) {
+            const startDate = date.setHours(0, 0, 0, 0)
+            const endDate  = date.setHours(23, 59, 59, 999)
+
+            urlParams.append("date_from", startDate.toString())
+            urlParams.append("date_to", endDate.toString())
         }
         
         const response = await apiClient.get<Order[]>(`${this.baseUrl}/delivery-boy/my-orders?` + urlParams.toString());

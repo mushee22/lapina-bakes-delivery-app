@@ -120,6 +120,7 @@ export default function LoginForm() {
         activeOpacity={0.8}
         onPress={handleSubmit(onSubmit, onError)}
         disabled={isSubmitting}
+        isLoading={isSubmitting}
         className="mt-4"
         variant="primary"
       >

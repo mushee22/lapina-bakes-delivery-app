@@ -7,7 +7,7 @@ export type AuthContextType = {
   user?: User;
   token?: string;
   onSuccessFullyLogin?: (user?:User, token?: string) => void;
-  gotoHomePage: () => void;
+  gotoHomePage: (user?: User) => void;
   onLogout: () => void;
 };
 

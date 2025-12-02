@@ -75,7 +75,6 @@ export default function AuthContextProvider({
 
   async function saveToken(value: string) {
     await SecureStore.setItemAsync("token", value);
-    console.log("AuthContextProvider saveToken", value);
   }
 
   const onSuccessFullyLogin = async (user?: User, token?: string) => {
@@ -84,10 +83,10 @@ export default function AuthContextProvider({
     setIsAuthenticated(true);
     setIsAuthenticating(false);
     await saveToken(token || "");
-    handleGotoHomePage()
+    handleGotoHomePage(user)
   };
 
-  const handleGotoHomePage = useCallback(() => {
+  const handleGotoHomePage = useCallback((user?: User) => {
     const role = user?.roles[0];
     if (!role || role !== ALLOWED_ROLE) {
       router.replace("/login");
@@ -95,7 +94,7 @@ export default function AuthContextProvider({
       return;
     }
     router.replace("/delivery/(tabs)/home");
-  },[user?.roles, router])
+  },[router])
 
   const onLogout = async () => {
     setIsAuthenticated(false);

@@ -29,5 +29,5 @@ export default function useSettings() {
 
     },[isLoading, isError, settings])
 
-    return { payment_scanner, support_number, support_email }
+    return { payment_scanner, support_number, support_email, isFetching: isLoading }
 }

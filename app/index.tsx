@@ -10,11 +10,11 @@ export default function Index() {
   useEffect(() => {
     if (isAuthenticating) return;
     if (isAuthenticated) {
-      gotoHomePage()
+      gotoHomePage(user)
       return
     }
     router.replace('/login');
-  }, [isAuthenticated, isAuthenticating, router, user?.roles, gotoHomePage]);  
+  }, [isAuthenticated, isAuthenticating, router, user, gotoHomePage]);  
 
   return (
     <View className="flex-1 items-center justify-center bg-white">

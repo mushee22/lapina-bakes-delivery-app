@@ -28,7 +28,6 @@ class CartService {
     }
 
     async removeItem(id: number) {
-        console.log(id);
         const response = await apiClient.delete<Cart>(`${this.baseUrl}/${id}`);
         return response.data;
     }
