@@ -4,7 +4,7 @@ import { Stack } from "expo-router";
 export default function Layout() {
   return (
     <>
-  
+
       <Stack
         screenOptions={{
           headerShown: false,
@@ -19,6 +19,41 @@ export default function Layout() {
           options={{ title: "Order", headerShown: false }}
         />
         <Stack.Screen
+          name="transactions"
+          options={{
+            title: "Transactions",
+            headerShown: true,
+            header: () => (
+              <StackHeader
+                title="Transactions"
+                isAddTranscation={true}
+                isScannIcon={false}
+                isBackButtonVisible={true}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="add-transaction"
+          options={
+            {
+              title: "Add Transaction",
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: "#FFF8F1",
+              },
+              presentation: "formSheet",
+              sheetAllowedDetents: [0.85],
+              contentStyle: {
+                backgroundColor: "#FFF8F1",
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+                height: '100%'
+              },
+            }}
+        />
+        <Stack.Screen
           name="scanner"
           options={{
             title: "Order",
@@ -29,6 +64,7 @@ export default function Layout() {
                 isCart={false}
                 isScannIcon={false}
                 isBackButtonVisible={true}
+                isAddTranscation={true}
               />
             ),
           }}

@@ -1,5 +1,5 @@
 import apiClient from "@/lib/api-client";
-import { Location } from "@/type/store";
+import { Location, Store } from "@/type/store";
 import { Settings } from "@/type/user";
 
 class CommonService {
@@ -8,8 +8,18 @@ class CommonService {
         return response.data;
     }
 
-     async getSettings() {
+    async getDeliveryStores() {
+        const response = await apiClient.get<Store[]>(`stores/delivery-boy/my-stores`);
+        return response.data;
+    }
+
+    async getSettings() {
         const response = await apiClient.get<Settings[]>(`settings`);
+        return response.data;
+    }
+
+    async getStores() {
+        const response = await apiClient.get<Store[]>(`stores`);
         return response.data;
     }
 }

@@ -1,7 +1,7 @@
 import { usePlatform } from "@/hooks/use-platform";
 import { cn } from "@/lib/utils";
-import { useRouter } from "expo-router";
-import { ChevronLeft } from "lucide-react-native";
+import { Link, useRouter } from "expo-router";
+import { ChevronLeft, Plus } from "lucide-react-native";
 import { TouchableOpacity, View } from "react-native";
 import ScannerButton from "../ui/scanner-button";
 import Typography from "./Typography";
@@ -10,11 +10,13 @@ export function StackHeader({
   title,
   isCart = true,
   isScannIcon = true,
+  isAddTranscation = true,
   isBackButtonVisible = true,
 }: {
   title: string;
   isCart?: boolean;
   isScannIcon?: boolean,
+  isAddTranscation?: boolean,
   isBackButtonVisible?: boolean;
 }) {
   const { isIOS } = usePlatform();
@@ -30,13 +32,22 @@ export function StackHeader({
       <View className="flex-1 items-center">
         <Typography.Lg className="font-bold text-white">{title}</Typography.Lg>
       </View>
-      {isScannIcon ? (
-        <View className="absolute right-3 bottom-4">
-          <ScannerButton />
-        </View>
-      ) : (
-        <></>
-      )}
+      <View className="absolute right-3 bottom-4 flex-row gap-x-2">
+        {isScannIcon ? (
+          <View className="">
+            <ScannerButton />
+          </View>
+        ) : (
+          <></>
+        )}
+        {isAddTranscation ? (
+          <Link href="/delivery/add-transaction">
+            <Plus color="#fff" />
+          </Link>
+        ) : (
+          <></>
+        )}
+      </View>
     </View>
   );
 }

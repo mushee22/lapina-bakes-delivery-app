@@ -9,6 +9,7 @@ import { makeAPhoneCall } from "@/lib/helper";
 import { useRouter } from "expo-router";
 import {
   ChevronRight,
+  DollarSign,
   HelpCircle,
   LogOut,
   Package,
@@ -92,13 +93,13 @@ export default function ProfileScreen() {
               subtitle="Orders in your locations"
               onPress={() => router.push("/delivery/(tabs)/home")}
             />
-            {/* <ProfileMenuItem
-              icon={<ScanEyeIcon size={20} color={themeConfig.colors.brand} />}
-              title="Payment Scanner"
-              subtitle="Scanner image to make payment"
-              onPress={() => router.push("/delivery/scanner")}
-            /> */}
-            <DeliveryBoyLocationListDialog/>
+            <ProfileMenuItem
+              icon={<DollarSign size={20} color={themeConfig.colors.brand} />}
+              title="Transactions"
+              subtitle="My Transactions"
+              onPress={() => router.push("/delivery/transactions")}
+            />
+            <DeliveryBoyLocationListDialog />
           </View>
 
           <View className="bg-white rounded-2xl shadow-sm shadow-black/5 border border-gray-100 mb-6">

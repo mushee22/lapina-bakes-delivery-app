@@ -13,7 +13,7 @@ export default function TabLayout() {
             paddingBottom: 12,
             borderTopWidth: 0.5,
             borderTopColor: "#E7DACE",
-            height:65
+            height: 65
           },
           headerShown: false,
           headerRight: () => <CartButton />,

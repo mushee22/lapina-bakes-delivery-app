@@ -1,5 +1,4 @@
 import { Button, ScreenWrapper, Typography } from "@/components/elements";
-import CancelOrder from "@/components/ui/order-cancellation";
 import OrderItemCard from "@/components/ui/order-item-card";
 import OrderStatus from "@/components/ui/order-status";
 import PhoneCallLink from "@/components/ui/phone-call-link";
@@ -60,11 +59,11 @@ export default function Index() {
             contentContainerClassName="pb-6"
             showsVerticalScrollIndicator={false}
             refreshControl={
-            <RefreshControl 
-             refreshing={isRefreshing}
-             onRefresh={onRefresh} 
-            />
-          }
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+              />
+            }
           >
             <View className="mb-6">
               <View className="flex-row items-center mb-3">
@@ -169,35 +168,30 @@ export default function Index() {
           </ScrollView>
           <View className="gap-y-2">
 
-           {
-              order?.status === "out_of_delivery" ?
-              <Button 
-               variant="primary" 
-               disabled={isMarkingAsDelivered} 
-               isLoading={isMarkingAsDelivered} 
-               className="bg-success"
-               isConfirm={true}
-               confirmButtonText="Yes"
-               cancelButtonText="No"
-               onConfirm={() => {
-                onMarkAsDelivered(orderId as string);
-               }}
-               confirmTitle="Mark as delivered"
-               confirmSubtitle="Are you sure you want to mark this order as delivered?"
-               >
-                <Typography.Base className="ml-2 text-white">
-                  Mark As Delivered
-                </Typography.Base>
-              </Button>
-              :
-              null
-            } 
             {
-              order && order?.status !== "delivered" && order?.status !== "cancelled" ?
-              <CancelOrder orderId={order.id}/>
-              :
-              null
+              order?.status === "out_of_delivery" ?
+                <Button
+                  variant="primary"
+                  disabled={isMarkingAsDelivered}
+                  isLoading={isMarkingAsDelivered}
+                  className="bg-success"
+                  isConfirm={true}
+                  confirmButtonText="Yes"
+                  cancelButtonText="No"
+                  onConfirm={() => {
+                    onMarkAsDelivered(orderId as string);
+                  }}
+                  confirmTitle="Mark as delivered"
+                  confirmSubtitle="Are you sure you want to mark this order as delivered?"
+                >
+                  <Typography.Base className="ml-2 text-white">
+                    Mark As Delivered
+                  </Typography.Base>
+                </Button>
+                :
+                null
             }
+
             {order?.has_invoice && order.status == "delivered" ? (
               <Button variant="primary" onPress={onDownloadInvoice} disabled={isDownloadingInvoice} isLoading={isDownloadingInvoice} className="bg-primary">
                 <DownloadIcon size={20} color={"white"} />
