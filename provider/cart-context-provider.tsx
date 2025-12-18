@@ -1,4 +1,5 @@
 import { CartContext } from "@/context/cart-context";
+import { useAuthContext } from "@/hooks/use-auth-context";
 import CustomError from "@/lib/error";
 import { cartService } from "@/service/cart";
 import { orderService } from "@/service/order";
@@ -19,6 +20,8 @@ export default function CartContextProvider({
   const [lastOrder, setLastOrder] = useState<Order | null>(null);
   const [showOrderSuccess, setShowOrderSuccess] = useState(false);
 
+  const { isAuthenticated } = useAuthContext();
+
   const {
     data,
     isLoading: isFetchingCart,
@@ -27,6 +30,7 @@ export default function CartContextProvider({
   } = useQuery({
     queryKey: ["cart"],
     queryFn: () => cartService.getUserCart(),
+    enabled: isAuthenticated
   });
 
   const { mutateAsync: addItem, isPending: isAddingItem } = useMutation({
@@ -204,20 +208,7 @@ export default function CartContextProvider({
     router.push("/customer/(tabs)/order");
   };
 
-  const handleDownloadInvoice = async (orderId: number) => {
-    try {
-      const response = await orderService.downloadInvoice(orderId);
-      return response;
-    } catch (error) {
-      console.log(error);
-      Toast.show({
-        type: "error",
-        text1: "Failed to download invoice",
-        text2: "Please try again or contact support",
-      });
-      return null;
-    }
-  };
+
 
   const isUpdatingCart = useMemo(
     () =>

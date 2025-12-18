@@ -3,11 +3,9 @@ import { ALLOWED_ROLE } from "@/constants";
 import { AuthContext } from "@/context/auth-context";
 import { authService } from "@/service/auth";
 import { User } from "@/type/user";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { ReactNode, useCallback, useEffect, useState } from "react";
-import { Alert } from "react-native";
 import Toast from "react-native-toast-message";
 
 export default function AuthContextProvider({
@@ -20,81 +18,69 @@ export default function AuthContextProvider({
   const [user, setUser] = useState<User | undefined>(undefined);
   const [token, setToken] = useState<string | undefined>(undefined);
 
-  const router = useRouter();
-
-  useEffect(() => {
-    getToken();
-  }, []);
+  const router = useRouter()
 
 
-  const  { data, isLoading, isError } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => authService.getUser(),
-    enabled: !!token,
-  })
-
-
-  const updateUserData = useCallback(async(user?:User, isError?:boolean) => {
-    if(isError) {
-      setIsAuthenticated(false);
-      setIsAuthenticating(false);
-      setUser(undefined);
-      setToken(undefined);
-      await SecureStore.deleteItemAsync("token");
-      router.replace("/login");
-      return;
-    }
-    console.log(user)
-    setIsAuthenticated(true);
+  const handleInvalidToken = async () => {
+    setIsAuthenticated(false);
     setIsAuthenticating(false);
-    setUser(user);
+    setUser(undefined);
+    setToken(undefined);
+    await SecureStore.deleteItemAsync("token");
+    router.replace("/login");
+  }
+
+  useEffect(() => {
+    revalidateUserAuthToken();
   }, []);
 
 
-  useEffect(() => {
-    if (data && data.data && !isLoading && !isError) {
-      updateUserData(data.data);
-    }
-
-    if(!isLoading && isError) {
-      updateUserData(undefined, true);
-    }
-  }, [data, isLoading, isError, updateUserData]);
-  
-  async function getToken() {
+  const revalidateUserAuthToken = async () => {
     const token = await SecureStore.getItemAsync("token");
-    if (!token) {
-      setIsAuthenticated(false);
-      setIsAuthenticating(false);
-      setUser(undefined);
-      setToken(undefined);
+    console.log(token, "token");
+    if (!token || !token.length) {
+      handleInvalidToken();
       return;
     }
-    setToken(token);
+    try {
+      const data = await authService.getUser();
+      const user = data.data;
+
+      if (!user) {
+        handleInvalidToken();
+        return;
+      }
+      setToken(token);
+      setUser(user)
+      setIsAuthenticated(true);
+      setIsAuthenticating(false);
+    } catch (error) {
+      handleInvalidToken();
+    }
   }
 
-  async function saveToken(value: string) {
-    await SecureStore.setItemAsync("token", value);
-  }
 
   const onSuccessFullyLogin = async (user?: User, token?: string) => {
-    setUser(user);
+    if (!token || !user) {
+      handleInvalidToken();
+      return;
+    }
+    await SecureStore.setItemAsync("token", token);
     setToken(token);
+    setUser(user);
     setIsAuthenticated(true);
     setIsAuthenticating(false);
-    await saveToken(token || "");
-    handleGotoHomePage(user)
+    handleGotoHomePage(user);
   };
 
-  const handleGotoHomePage = useCallback((user?: User) => {
-    const role = user?.roles[0];
+  const handleGotoHomePage = useCallback((updatedUser?: User) => {
+    const role = updatedUser?.roles[0];
     if (!role || role !== ALLOWED_ROLE) {
       router.replace("/login");
-      Alert.alert("Error to login")
       return;
     }
     router.replace("/delivery/(tabs)/home");
-  },[router])
+  }, [router, user])
 
   const onLogout = async () => {
     setIsAuthenticated(false);
@@ -113,8 +99,8 @@ export default function AuthContextProvider({
         user,
         token,
         onSuccessFullyLogin,
-        gotoHomePage:handleGotoHomePage,
         onLogout,
+        gotoHomePage: handleGotoHomePage
       }}
     >
       {children}
