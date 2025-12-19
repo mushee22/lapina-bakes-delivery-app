@@ -26,7 +26,7 @@ export default function Layout() {
             header: () => (
               <StackHeader
                 title="Transactions"
-                isAddTranscation={true}
+                isAddTranscation={false}
                 isScannIcon={false}
                 isBackButtonVisible={true}
               />
@@ -64,7 +64,7 @@ export default function Layout() {
                 isCart={false}
                 isScannIcon={false}
                 isBackButtonVisible={true}
-                isAddTranscation={true}
+                isAddTranscation={false}
               />
             ),
           }}

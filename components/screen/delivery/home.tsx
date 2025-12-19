@@ -11,7 +11,8 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { useQuery } from "@tanstack/react-query";
-import { Calendar, ListFilter, X } from "lucide-react-native";
+import { Link, useRouter } from "expo-router";
+import { Calendar, ListFilter, Plus, X } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -42,6 +43,8 @@ export default function DeliveryBoyHomeScreen() {
     page: 1,
     date: undefined,
   });
+
+  const router = useRouter()
 
   const { isRefreshing, onRefresh } = useRefresh(["delivery-boy-orders"]);
 
@@ -134,6 +137,12 @@ export default function DeliveryBoyHomeScreen() {
 
   return (
     <ScreenWrapper edges={[]}>
+      <Link href={"/delivery/add-transaction"}
+        className="absolute top-4 z-40 right-4 rounded-full">
+        <View className="w-10 h-10 items-center justify-center bg-primary rounded-full">
+          <Plus color="white" size={20} />
+        </View>
+      </Link>
       <View className="mb-4">
         <Typography.Lg className="font-bold text-gray-800">
           Your Orders to Deliver
@@ -231,25 +240,25 @@ export default function DeliveryBoyHomeScreen() {
                       value={query.date ?? defaultDate}
                       onChange={onChange}
                       display="inline"
-  
+
                     />
                   </View>
                   <View className="flex-row px-4 pb-3 gap-x-8 justify-end">
                     <TouchableOpacity className=""
-                    onPress={() => {
-                      setShowDatePicker(false)
-                    }}
+                      onPress={() => {
+                        setShowDatePicker(false)
+                      }}
                     >
                       <Typography.Lg className="text-blue-400 uppercase text-xl">Cancel</Typography.Lg>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={() => {
-                      setShowDatePicker(false)
-                      setQuery({
-                        ...query,
-                        date: tempDate
-                      })
-                    }}
+                      onPress={() => {
+                        setShowDatePicker(false)
+                        setQuery({
+                          ...query,
+                          date: tempDate
+                        })
+                      }}
                     >
                       <Typography.Lg className="text-blue-400 uppercase text-xl">OK</Typography.Lg>
                     </TouchableOpacity>

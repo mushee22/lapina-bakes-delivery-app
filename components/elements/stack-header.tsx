@@ -10,7 +10,7 @@ export function StackHeader({
   title,
   isCart = true,
   isScannIcon = true,
-  isAddTranscation = true,
+  isAddTranscation = false,
   isBackButtonVisible = true,
 }: {
   title: string;
