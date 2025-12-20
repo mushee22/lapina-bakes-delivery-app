@@ -21,10 +21,6 @@ export default function RootLayout() {
                 options={{ title: "Home", headerShown: false }}
               />
               <Stack.Screen
-                name="customer"
-                options={{ title: "Home", headerShown: false }}
-              />
-              <Stack.Screen
                 name="delivery"
                 options={{ title: "Home", headerShown: false }}
               />

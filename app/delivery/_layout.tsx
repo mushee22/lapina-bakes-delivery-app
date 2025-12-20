@@ -35,23 +35,19 @@ export default function Layout() {
         />
         <Stack.Screen
           name="add-transaction"
-          options={
-            {
-              title: "Add Transaction",
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: "#FFF8F1",
-              },
-              presentation: "formSheet",
-              sheetAllowedDetents: [0.85],
-              contentStyle: {
-                backgroundColor: "#FFF8F1",
-                display: "flex",
-                flexDirection: "column",
-                flex: 1,
-                height: '100%'
-              },
-            }}
+          options={{
+            title: "Add New Transaction",
+            headerShown: true,
+            header: () => (
+              <StackHeader
+                title="Add New Transaction"
+                isCart={false}
+                isScannIcon={false}
+                isBackButtonVisible={true}
+                isAddTranscation={false}
+              />
+            ),
+          }}
         />
         <Stack.Screen
           name="scanner"

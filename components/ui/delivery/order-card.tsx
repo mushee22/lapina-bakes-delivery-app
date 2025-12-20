@@ -25,13 +25,13 @@ export default function OrderCard({
   total,
   itemCount,
   status,
-  items 
+  items
 }: OrderCardProps) {
 
   const dateString = new Date(date || "").toLocaleDateString();
   const timeString = new Date(date || "").toLocaleTimeString();
 
-  
+
 
   return (
     <Link href={`/delivery/order/${id}`} asChild>
@@ -73,7 +73,7 @@ export default function OrderCard({
 
           {/* Footer */}
           <View className="flex-row items-center justify-between pt-3 border-t border-gray-100">
-            <OrderStatusBadge status={status || "pending"} />
+            <OrderStatusBadge status={status || "order_placed"} />
             <View className="flex-row items-center">
               <Typography.Sm className="text-gray-500 mr-1">View Details</Typography.Sm>
               <ChevronRight size={14} color="#666" />

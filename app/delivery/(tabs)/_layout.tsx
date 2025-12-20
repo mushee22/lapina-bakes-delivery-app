@@ -1,5 +1,5 @@
 import { StackHeader } from "@/components/elements/stack-header";
-import { CartButton, TabBarIcon } from "@/components/ui";
+import { TabBarIcon } from "@/components/ui";
 import { deliveryBoysBottomBar } from "@/constants";
 import { Tabs } from "expo-router";
 
@@ -16,7 +16,6 @@ export default function TabLayout() {
             height: 65
           },
           headerShown: false,
-          headerRight: () => <CartButton />,
         }}
       >
         {deliveryBoysBottomBar.map((item) => (

@@ -1,15 +1,15 @@
 import { Typography } from "@/components/elements";
-import { CheckCircle, AlertCircle, XCircle, Info } from "lucide-react-native";
+import { AlertCircle, CheckCircle, Info, XCircle } from "lucide-react-native";
 import React from "react";
-import { View, Dimensions } from "react-native";
-import { BaseToast, ErrorToast, ToastConfig } from "react-native-toast-message";
+import { Dimensions, View } from "react-native";
+import { ToastConfig } from "react-native-toast-message";
 
 const CustomSuccessToast = ({ text1, text2, ...props }: any) => {
   const { width } = Dimensions.get('window');
   return (
-    <View 
+    <View
       className="bg-white mx-4 rounded-2xl shadow-xl border-l-4 border-green-500 p-4 flex-row items-start"
-      style={{ 
+      style={{
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
@@ -38,9 +38,9 @@ const CustomSuccessToast = ({ text1, text2, ...props }: any) => {
 const CustomErrorToast = ({ text1, text2, ...props }: any) => {
   const { width } = Dimensions.get('window');
   return (
-    <View 
+    <View
       className="bg-white mx-4 rounded-2xl shadow-xl border-l-4 border-red-500 p-4 flex-row items-start"
-      style={{ 
+      style={{
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
@@ -69,9 +69,9 @@ const CustomErrorToast = ({ text1, text2, ...props }: any) => {
 const CustomInfoToast = ({ text1, text2, ...props }: any) => {
   const { width } = Dimensions.get('window');
   return (
-    <View 
+    <View
       className="bg-white mx-4 rounded-2xl shadow-xl border-l-4 border-blue-500 p-4 flex-row items-start"
-      style={{ 
+      style={{
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
@@ -100,9 +100,9 @@ const CustomInfoToast = ({ text1, text2, ...props }: any) => {
 const CustomWarningToast = ({ text1, text2, ...props }: any) => {
   const { width } = Dimensions.get('window');
   return (
-    <View 
+    <View
       className="bg-white mx-4 rounded-2xl shadow-xl border-l-4 border-amber-500 p-4 flex-row items-start"
-      style={{ 
+      style={{
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
