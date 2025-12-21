@@ -17,7 +17,7 @@ export default function TabBarIcon({
   className?: string;
 }) {
   return (
-    <View className="flex-1 w-12 items-center gap-y-1">
+    <View className="flex-1 w-[60px] items-center gap-y-1">
       <LucideIcon color={isFocused ? "#C85A2B" : "gray"} />
       <Typography.Sm
         className={cn(

@@ -9,7 +9,6 @@ import { makeAPhoneCall } from "@/lib/helper";
 import { useRouter } from "expo-router";
 import {
   ChevronRight,
-  DollarSign,
   HelpCircle,
   LogOut,
   Package,
@@ -93,12 +92,7 @@ export default function ProfileScreen() {
               subtitle="Orders in your locations"
               onPress={() => router.push("/delivery/(tabs)/home")}
             />
-            <ProfileMenuItem
-              icon={<DollarSign size={20} color={themeConfig.colors.brand} />}
-              title="Transactions"
-              subtitle="My Transactions"
-              onPress={() => router.push("/delivery/transactions")}
-            />
+
             <DeliveryBoyLocationListDialog />
           </View>
 

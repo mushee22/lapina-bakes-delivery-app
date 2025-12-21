@@ -1,4 +1,4 @@
-import { HomeIcon, ShoppingCart, UserIcon } from "lucide-react-native";
+import { DollarSign, HomeIcon, ShoppingCart, UserIcon } from "lucide-react-native";
 
 export const bottomBarItems = [
     {
@@ -35,6 +35,15 @@ export const deliveryBoysBottomBar = [
         name: 'Home',
         icon: HomeIcon,
         route: 'home',
+        options: {
+            headerShown: true,
+            backButtonVisible: false,
+        }
+    },
+    {
+        name: 'Transactions',
+        icon: DollarSign,
+        route: 'transactions',
         options: {
             headerShown: true,
             backButtonVisible: false,

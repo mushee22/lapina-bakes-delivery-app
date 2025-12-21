@@ -1,4 +1,3 @@
-import Dialog from "@/components/elements/modal";
 import LocationFilter from "@/components/section/location-filter";
 import OrderCard from "@/components/ui/order-card";
 import OrderStatusBadge from "@/components/ui/order-status";
@@ -6,13 +5,13 @@ import useRefresh from "@/hooks/use-refresh";
 import { commonService } from "@/service/common";
 import { orderService } from "@/service/order";
 import { OrderStatus } from "@/type/order";
-import DateTimePicker, {
+import {
   DateTimePickerAndroid,
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useRouter } from "expo-router";
-import { Calendar, ListFilter, Plus, X } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { ListFilter } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -20,8 +19,7 @@ import {
   Platform,
   RefreshControl,
   ScrollView,
-  TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { ScreenWrapper, Typography } from "../../elements";
@@ -137,12 +135,7 @@ export default function DeliveryBoyHomeScreen() {
 
   return (
     <ScreenWrapper edges={[]}>
-      <Link href={"/delivery/add-transaction"}
-        className="absolute top-4 z-40 right-4 rounded-full">
-        <View className="w-10 h-10 items-center justify-center bg-primary rounded-full">
-          <Plus color="white" size={20} />
-        </View>
-      </Link>
+
       <View className="mb-4">
         <Typography.Lg className="font-bold text-gray-800">
           Your Orders to Deliver
@@ -200,7 +193,7 @@ export default function DeliveryBoyHomeScreen() {
             <RenderRightIcon status={query.status as OrderStatus} />
           )}
         />
-        <View className="flex-row gap-x-1">
+        {/* <View className="flex-row gap-x-1">
           {query.date ? (
             <View className="bg-gray-200 px-2 py-0.5 rounded-md flex-row gap-x-0.5 items-center">
               <Typography.Sm>{query?.date?.toLocaleDateString()}</Typography.Sm>
@@ -267,7 +260,7 @@ export default function DeliveryBoyHomeScreen() {
               </Dialog>
             ) : null}
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
