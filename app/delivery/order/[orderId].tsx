@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { Clock, DownloadIcon, MapPin, Receipt } from "lucide-react-native";
 import { ActivityIndicator, RefreshControl, ScrollView, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
 
@@ -20,6 +21,7 @@ export default function Index() {
   const { isRefreshing, onRefresh } = useRefresh(['order'])
 
   const { isIOS } = usePlatform()
+  const insets = useSafeAreaInsets();
 
   const { data: order, isLoading } = useQuery({
     queryKey: ["order", orderId],
@@ -181,6 +183,7 @@ export default function Index() {
                   onConfirm={() => {
                     onMarkAsDelivered(orderId as string);
                   }}
+                  style={{ marginBottom: insets.bottom + 8 }}
                   confirmTitle="Mark as delivered"
                   confirmSubtitle="Are you sure you want to mark this order as delivered?"
                 >
@@ -193,7 +196,14 @@ export default function Index() {
             }
 
             {order?.has_invoice && order.status == "delivered" ? (
-              <Button variant="primary" onPress={onDownloadInvoice} disabled={isDownloadingInvoice} isLoading={isDownloadingInvoice} className="bg-primary">
+              <Button
+                variant="primary"
+                onPress={onDownloadInvoice}
+                disabled={isDownloadingInvoice}
+                isLoading={isDownloadingInvoice}
+                className="bg-primary"
+                style={{ marginBottom: insets.bottom + 8 }}
+              >
                 <DownloadIcon size={20} color={"white"} />
                 <Typography.Base className="ml-2 text-white">
                   Download Incoice
