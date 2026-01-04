@@ -6,19 +6,16 @@ import { commonService } from "@/service/common";
 import { orderService } from "@/service/order";
 import { OrderStatus } from "@/type/order";
 import {
-  DateTimePickerAndroid,
-  DateTimePickerEvent,
+  DateTimePickerEvent
 } from "@react-native-community/datetimepicker";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { ListFilter } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  Platform,
   RefreshControl,
-  ScrollView,
   View
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
@@ -46,7 +43,7 @@ export default function DeliveryBoyHomeScreen() {
 
   const { isRefreshing, onRefresh } = useRefresh(["delivery-boy-orders"]);
 
-  const { data: { orders = [], meta } = {}, isLoading } = useQuery({
+  const { data: infiniteOrders, isLoading, hasNextPage, fetchNextPage, refetch } = useInfiniteQuery({
     queryKey: [
       "delivery-boy-orders",
       query.location,
@@ -54,13 +51,20 @@ export default function DeliveryBoyHomeScreen() {
       query.page,
       query.date,
     ],
-    queryFn: () =>
+    queryFn: ({ pageParam = 1 }) =>
       orderService.getDeliveryBoyOrders(
         query.location,
         query.status,
         query.date,
-        query.page
+        pageParam
       ),
+    initialPageParam: 1,
+    getNextPageParam: (data) => {
+      if (data.meta && data.meta.last_page > data.meta.current_page) {
+        return data.meta.current_page + 1
+      }
+      return undefined
+    },
   });
 
   const { data: locations = [], isLoading: isLoadingLocations } = useQuery({
@@ -68,34 +72,16 @@ export default function DeliveryBoyHomeScreen() {
     queryFn: () => commonService.getLocations(),
   });
 
-  const handleLoadMore = () => {
-    if ((meta?.last_page || 0) > query.page) {
-      setQuery({
-        ...query,
-        page: query.page + 1,
-      });
-    }
-  };
+
 
   const handleOnSelectCategory = (location: string) => {
     setQuery({
       ...query,
       location,
-      page: 1,
     });
   };
 
-  const handleClickOnDatePicker = () => {
-    if (Platform.OS === "android") {
-      DateTimePickerAndroid.open({
-        value: query.date ?? defaultDate,
-        onChange: onChange,
-        mode: "date",
-      });
-      return;
-    }
-    setShowDatePicker(true);
-  };
+
 
   const onChange = (event: DateTimePickerEvent, date?: Date) => {
     setTempDate(date)
@@ -193,123 +179,51 @@ export default function DeliveryBoyHomeScreen() {
             <RenderRightIcon status={query.status as OrderStatus} />
           )}
         />
-        {/* <View className="flex-row gap-x-1">
-          {query.date ? (
-            <View className="bg-gray-200 px-2 py-0.5 rounded-md flex-row gap-x-0.5 items-center">
-              <Typography.Sm>{query?.date?.toLocaleDateString()}</Typography.Sm>
-              <TouchableOpacity
-                className="ml-1 p-0.5 bg-white rounded-full"
-                onPress={() => setQuery({ ...query, date: undefined })}
-              >
-                <X size={13} />
-              </TouchableOpacity>
-            </View>
-          ) : null}
-          <TouchableOpacity
-            className="flex-row gap-x-1 items-center"
-            onPress={handleClickOnDatePicker}
-          >
-            <Calendar size={20} />
-            {showDatePicker ? (
-              <Dialog visible={true}>
-                <View className="bg-white rounded-2xl overflow-hidden relative">
-                  <TouchableOpacity
-                    onPress={() => setShowDatePicker(false)}
-                    className="absolute top-2 right-2 z-20 p-2 rounded-full bg-white"
-                  >
-                    <X size={20} />
-                  </TouchableOpacity>
-                  <View className=" bg-blue-600 pl-4 pt-3 pb-2 gap-y-1">
-                    <Typography.Base className="text-white text-lg font-bold">
-                      {year}
-                    </Typography.Base>
-                    <Typography.Base className="text-white text-5xl">
-                      {formatedDate}
-                    </Typography.Base>
-                  </View>
-                  <View>
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      value={query.date ?? defaultDate}
-                      onChange={onChange}
-                      display="inline"
-
-                    />
-                  </View>
-                  <View className="flex-row px-4 pb-3 gap-x-8 justify-end">
-                    <TouchableOpacity className=""
-                      onPress={() => {
-                        setShowDatePicker(false)
-                      }}
-                    >
-                      <Typography.Lg className="text-blue-400 uppercase text-xl">Cancel</Typography.Lg>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setShowDatePicker(false)
-                        setQuery({
-                          ...query,
-                          date: tempDate
-                        })
-                      }}
-                    >
-                      <Typography.Lg className="text-blue-400 uppercase text-xl">OK</Typography.Lg>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </Dialog>
-            ) : null}
-          </TouchableOpacity>
-        </View> */}
       </View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        className="flex-1"
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View className="flex-1">
-          {isLoading ? (
-            <View className="flex-1 items-center justify-center mt-6">
-              <ActivityIndicator color="#C85A2B" />
-            </View>
-          ) : (
-            <FlatList
-              data={orders}
-              ItemSeparatorComponent={() => <View className="h-1" />}
-              contentContainerClassName="pb-6"
-              ListEmptyComponent={() => (
-                <View className="flex-1 items-center justify-center mt-6">
-                  <Typography.Lg className="text-gray-400">
-                    No orders found
-                  </Typography.Lg>
-                </View>
-              )}
-              renderItem={({ item: order }) => (
-                <OrderCard
-                  key={order.id}
-                  id={order.id}
-                  orderId={order.order_number}
-                  date={order.created_at}
-                  total={order.total_amount}
-                  itemCount={order.order_items?.length}
-                  status={order.status}
-                  items={order.order_items}
-                  detailViewPathGroup="delivery"
-                />
-              )}
-              keyExtractor={(item) => item.id.toString()}
-              scrollEnabled={false}
-              onEndReached={() => {
-                if ((meta?.last_page || 0) > query.page) {
-                  handleLoadMore();
-                }
-              }}
-            />
-          )}
-        </View>
-      </ScrollView>
+
+      <View className="flex-1">
+        {isLoading ? (
+          <View className="flex-1 items-center justify-center mt-6">
+            <ActivityIndicator color="#C85A2B" />
+          </View>
+        ) : (
+          <FlatList
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={refetch} />
+            }
+            data={infiniteOrders?.pages?.map((page) => page.orders).flat() || []}
+            ItemSeparatorComponent={() => <View className="h-1" />}
+            contentContainerClassName="pb-6"
+            ListEmptyComponent={() => (
+              <View className="flex-1 items-center justify-center mt-6">
+                <Typography.Lg className="text-gray-400">
+                  No orders found
+                </Typography.Lg>
+              </View>
+            )}
+            renderItem={({ item: order }) => (
+              <OrderCard
+                key={order.id}
+                id={order.id}
+                orderId={order.order_number}
+                date={order.created_at}
+                total={order.total_amount}
+                itemCount={order.order_items?.length}
+                status={order.status}
+                items={order.order_items}
+                detailViewPathGroup="delivery"
+              />
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            scrollEnabled={true}
+            onEndReached={() => {
+              if (hasNextPage) {
+                fetchNextPage();
+              }
+            }}
+          />
+        )}
+      </View>
     </ScreenWrapper>
   );
 }

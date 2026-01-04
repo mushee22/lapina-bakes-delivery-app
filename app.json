@@ -10,10 +10,13 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lapinabakersapp",
+      "bundleIdentifier": "com.lapinabakersdeliveryapp",
       "icon": {
         "dark": "./assets/images/ios-light.png",
         "light": "./assets/images/ios-light.png"
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -48,6 +51,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ff9ac74e-2bb6-4bd0-98ae-f4cde9d30a6d"
+      }
+    },
+    "owner": "lapinabakers"
   }
 }
