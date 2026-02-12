@@ -11,7 +11,7 @@ import { orderService } from "@/service/order";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { Clock, DownloadIcon, MapPin, Receipt } from "lucide-react-native";
-import { ActivityIndicator, RefreshControl, ScrollView, View } from "react-native";
+import { ActivityIndicator, Platform, RefreshControl, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -183,7 +183,7 @@ export default function Index() {
                   onConfirm={() => {
                     onMarkAsDelivered(orderId as string);
                   }}
-                  style={{ marginBottom: insets.bottom + 8 }}
+                  style={{ marginBottom: Platform.OS === "ios" ? 0 : insets.bottom }}
                   confirmTitle="Mark as delivered"
                   confirmSubtitle="Are you sure you want to mark this order as delivered?"
                 >
@@ -202,7 +202,7 @@ export default function Index() {
                 disabled={isDownloadingInvoice}
                 isLoading={isDownloadingInvoice}
                 className="bg-primary"
-                style={{ marginBottom: insets.bottom + 8 }}
+                style={{ marginBottom: Platform.OS === "ios" ? 0 : insets.bottom }}
               >
                 <DownloadIcon size={20} color={"white"} />
                 <Typography.Base className="ml-2 text-white">

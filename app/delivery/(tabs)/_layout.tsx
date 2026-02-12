@@ -2,8 +2,13 @@ import { StackHeader } from "@/components/elements/stack-header";
 import { TabBarIcon } from "@/components/ui";
 import { deliveryBoysBottomBar } from "@/constants";
 import { Tabs } from "expo-router";
+import { Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
+
+  const insets = useSafeAreaInsets();
+
   return (
     <>
       <Tabs
@@ -13,7 +18,8 @@ export default function TabLayout() {
             paddingBottom: 12,
             borderTopWidth: 0.5,
             borderTopColor: "#E7DACE",
-            height: 65
+            height: 70,
+            marginBottom: Platform.OS === "ios" ? 10 : insets.bottom
           },
           headerShown: false,
         }}
