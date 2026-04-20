@@ -212,6 +212,7 @@ export default function DeliveryBoyHomeScreen() {
                 status={order.status}
                 items={order.order_items}
                 detailViewPathGroup="delivery"
+                storeName={order.store?.name ?? ""}
               />
             )}
             keyExtractor={(item) => item.id.toString()}

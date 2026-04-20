@@ -10,6 +10,7 @@ import OrderStatusBadge from "./order-status";
 interface OrderCardProps {
   id: number;
   orderId?: string;
+  storeName?: string;
   date?: string;
   time?: string;
   total?: number;
@@ -25,6 +26,7 @@ export default function OrderCard({
   date,
   total,
   itemCount,
+  storeName,
   status,
   items,
   detailViewPathGroup = "customer",
@@ -32,8 +34,8 @@ export default function OrderCard({
 
   const dateString = new Date(date || "").toLocaleDateString();
   const timeString = new Date(date || "").toLocaleTimeString();
-  
-  
+
+
 
   return (
     <Link href={detailViewPathGroup == "customer" ? `/customer/(tabs)/order/${id}` : `/delivery/order/${id}`} asChild>
@@ -46,7 +48,13 @@ export default function OrderCard({
                 <Package size={20} color={themeConfig.colors.brand} />
               </View>
               <View>
-                <Typography.Base className="font-bold text-gray-800">Order {orderId}</Typography.Base>
+                {
+                  storeName ?
+                    <Typography.Base className="font-bold text-gray-800"> {storeName}</Typography.Base>
+                    :
+
+                    <Typography.Base className="font-bold text-gray-800">Order {orderId}</Typography.Base>
+                }
                 <View className="flex-row  items-center mt-1">
                   <Calendar size={12} color="#666" />
                   <Typography.Sm className="text-gray-500 ml-1 mr-1">{dateString}</Typography.Sm>
@@ -55,12 +63,20 @@ export default function OrderCard({
                 </View>
               </View>
             </View>
+
             <View className="items-end">
               <Typography.Lg className="font-bold text-primary">{CURRENCY}{total}</Typography.Lg>
               {/* <Typography.Sm className="text-gray-500">{itemCount} items</Typography.Sm> */}
             </View>
           </View>
-
+          {
+            storeName ?
+              <View>
+                <Typography.Base className="font-bold text-gray-800">{orderId}</Typography.Base>
+              </View>
+              :
+              <></>
+          }
           {/* Items Preview */}
           <View className="flex-row flex-wrap gap-2 mb-3">
             {items?.slice(0, 3).map((item, index) => (
